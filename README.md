@@ -10,7 +10,7 @@ if err != nil {
 	log.Fatal(err)
 }
 
-token := apns.NewToken(key, "XXXXXXXXXX", "XXXXXXXXXX")
+token := apns.NewToken(key, "XXXXXXXXXX", "YYYYYYYYYY")
 client := apns.NewClient(token, nil)
 
 n := &apns.Notification{
