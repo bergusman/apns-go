@@ -76,7 +76,8 @@ func (t *Token) Generate() (string, error) {
 	if t.Key == nil {
 		return "", errors.New("key is nil")
 	}
-	bearer, issuedAt, err := GenerateBearer(t.Key, t.KeyID, t.TeamID)
+	issuedAt := time.Now().Unix()
+	bearer, err := GenerateBearer(t.Key, t.KeyID, t.TeamID, issuedAt)
 	if err != nil {
 		return "", err
 	}
