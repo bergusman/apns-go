@@ -31,9 +31,9 @@ func es256(key *ecdsa.PrivateKey, body string) ([]byte, error) {
 	return append(i2osp(r, 32), i2osp(s, 32)...), nil
 }
 
-func GenerateBearer(key *ecdsa.PrivateKey, keyId, teamId string, issuedAt int64) (string, error) {
-	h := fmt.Sprintf(`{"alg":"ES256","typ":"JWT","kid":"%s"}`, keyId)
-	p := fmt.Sprintf(`{"iss":"%s","iat":%d}`, teamId, issuedAt)
+func GenerateBearer(key *ecdsa.PrivateKey, keyID, teamID string, issuedAt int64) (string, error) {
+	h := fmt.Sprintf(`{"alg":"ES256","typ":"JWT","kid":"%s"}`, keyID)
+	p := fmt.Sprintf(`{"iss":"%s","iat":%d}`, teamID, issuedAt)
 	hp := base64.RawURLEncoding.EncodeToString([]byte(h)) + "." + base64.RawURLEncoding.EncodeToString([]byte(p))
 	sig, err := es256(key, hp)
 	if err != nil {
