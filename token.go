@@ -5,10 +5,14 @@ import (
 	"crypto/x509"
 	"encoding/pem"
 	"errors"
-	"io/ioutil"
 	"net/http"
+	"os"
 	"sync"
 	"time"
+)
+
+var (
+	ErrAuthKeyBadPEM = errors.New("invalid PEM")
 )
 
 type Token struct {
@@ -29,18 +33,23 @@ func NewToken(key *ecdsa.PrivateKey, keyID, teamID string) *Token {
 	}
 }
 
-func AuthKeyFromFile(filename string) (*ecdsa.PrivateKey, error) {
-	bytes, err := ioutil.ReadFile(filename)
+// AuthKeyFromFile loads an authentication token signing key
+// from the named text file with a .p8 file extension
+// and returns an *ecdsa.PrivateKey.
+func AuthKeyFromFile(name string) (*ecdsa.PrivateKey, error) {
+	data, err := os.ReadFile(name)
 	if err != nil {
 		return nil, err
 	}
-	return AuthKeyFromBytes(bytes)
+	return AuthKeyFromBytes(data)
 }
 
+// AuthKeyFromBytes load an authentication token signing key
+// from the in memory bytes and returns an *ecdsa.PrivateKey.
 func AuthKeyFromBytes(bytes []byte) (*ecdsa.PrivateKey, error) {
 	b, _ := pem.Decode(bytes)
 	if b == nil {
-		return nil, errors.New("invalid .p8 PEM")
+		return nil, ErrAuthKeyBadPEM
 	}
 
 	p8, err := x509.ParsePKCS8PrivateKey(b.Bytes)
