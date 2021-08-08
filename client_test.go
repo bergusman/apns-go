@@ -1,0 +1,5 @@
+package apns
+
+func Example() {
+
+}
