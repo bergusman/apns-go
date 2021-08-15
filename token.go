@@ -2,17 +2,10 @@ package apns
 
 import (
 	"crypto/ecdsa"
-	"crypto/x509"
-	"encoding/pem"
 	"errors"
 	"net/http"
-	"os"
 	"sync"
 	"time"
-)
-
-var (
-	ErrAuthKeyBadPEM = errors.New("invalid PEM")
 )
 
 type Token struct {
@@ -31,37 +24,6 @@ func NewToken(key *ecdsa.PrivateKey, keyID, teamID string) *Token {
 		KeyID:  keyID,
 		TeamID: teamID,
 	}
-}
-
-// AuthKeyFromFile loads an authentication token signing key
-// from the named text file with a .p8 file extension
-// and returns an *ecdsa.PrivateKey.
-func AuthKeyFromFile(name string) (*ecdsa.PrivateKey, error) {
-	data, err := os.ReadFile(name)
-	if err != nil {
-		return nil, err
-	}
-	return AuthKeyFromBytes(data)
-}
-
-// AuthKeyFromBytes load an authentication token signing key
-// from the in memory bytes and returns an *ecdsa.PrivateKey.
-func AuthKeyFromBytes(bytes []byte) (*ecdsa.PrivateKey, error) {
-	b, _ := pem.Decode(bytes)
-	if b == nil {
-		return nil, ErrAuthKeyBadPEM
-	}
-
-	p8, err := x509.ParsePKCS8PrivateKey(b.Bytes)
-	if err != nil {
-		return nil, err
-	}
-
-	key, ok := p8.(*ecdsa.PrivateKey)
-	if !ok {
-		return nil, errors.New("not ECDSA private key")
-	}
-	return key, nil
 }
 
 func (t *Token) Expired() bool {
