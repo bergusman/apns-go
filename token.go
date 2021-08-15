@@ -10,8 +10,11 @@ import (
 
 // See https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/establishing_a_token-based_connection_to_apns.
 
+// Token represents JSON Token used for token-based connection to APNs.
 type Token struct {
 	sync.Mutex
+
+	// Authentication token signing key
 	Key             *ecdsa.PrivateKey
 	KeyID           string
 	TeamID          string

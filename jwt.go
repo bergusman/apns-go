@@ -14,8 +14,10 @@ import (
 // See "Create and Encrypt Your JSON Token" section in
 // https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/establishing_a_token-based_connection_to_apns.
 
-// Private key is not ECDSA key with P-256 curve.
-var ErrJWTKeyNotECDSAP256 = errors.New("jwt: not ECDSA P-256 key")
+var (
+	// Private key is not ECDSA key with P-256 curve.
+	ErrJWTKeyNotECDSAP256 = errors.New("jwt: not ECDSA P-256 key")
+)
 
 // i2osp is an I2OSP (Integer to Octet Stream Primitive) function.
 func i2osp(n *big.Int) []byte {

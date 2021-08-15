@@ -51,6 +51,10 @@ func ExampleNotification() {
 
 }
 
+func ExampleBuildPayload() {
+
+}
+
 func ExampleGenerateBearer() {
 	key, err := apns.AuthKeyFromFile("testdata/AuthKey_5MDQ4KLTY7.p8")
 	if err != nil {
