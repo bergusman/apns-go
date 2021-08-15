@@ -57,7 +57,7 @@ func TestAuthKeyNotECDSA256(t *testing.T) {
 	for _, name := range names {
 		_, err := AuthKeyFromFile(name)
 		if err != nil {
-			if err != ErrAuthKeyNotECDSA256 {
+			if err != ErrAuthKeyNotECDSAP256 {
 				t.Errorf("%v: want ErrAuthKeyNotECDSA256 got: %q", name, err.Error())
 			}
 		} else {

@@ -2,6 +2,7 @@ package apns
 
 import (
 	"crypto/ecdsa"
+	"crypto/elliptic"
 	"crypto/x509"
 	"encoding/pem"
 	"errors"
@@ -9,9 +10,9 @@ import (
 )
 
 var (
-	ErrAuthKeyBadPEM      = errors.New("authkey: invalid PEM")
-	ErrAuthKeyBadPKCS8    = errors.New("authkey: invalid PKCS#8")
-	ErrAuthKeyNotECDSA256 = errors.New("authkey: not ECDSA 256 bits")
+	ErrAuthKeyBadPEM       = errors.New("authkey: invalid PEM")
+	ErrAuthKeyBadPKCS8     = errors.New("authkey: invalid PKCS#8")
+	ErrAuthKeyNotECDSAP256 = errors.New("authkey: not ECDSA P-256")
 )
 
 // AuthKeyFromFile loads an authentication token signing key
@@ -43,10 +44,10 @@ func AuthKeyFromBytes(bytes []byte) (*ecdsa.PrivateKey, error) {
 
 	key, ok := p8.(*ecdsa.PrivateKey)
 	if !ok {
-		return nil, ErrAuthKeyNotECDSA256
+		return nil, ErrAuthKeyNotECDSAP256
 	}
-	if key.Params().BitSize != 256 {
-		return nil, ErrAuthKeyNotECDSA256
+	if key.Curve != elliptic.P256() {
+		return nil, ErrAuthKeyNotECDSAP256
 	}
 
 	return key, nil
