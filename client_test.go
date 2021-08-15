@@ -1,5 +1,1 @@
 package apns
-
-func Example() {
-
-}
