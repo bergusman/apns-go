@@ -9,9 +9,18 @@ import (
 	"os"
 )
 
+// Authentication Token Signing Key
+// See "Obtain an Encryption Key and Key ID from Apple" secion in
+// https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/establishing_a_token-based_connection_to_apns.
+
 var (
-	ErrAuthKeyBadPEM       = errors.New("authkey: invalid PEM")
-	ErrAuthKeyBadPKCS8     = errors.New("authkey: invalid PKCS#8")
+	// .p8 file is not PEM encoded or invalid PEM file.
+	ErrAuthKeyBadPEM = errors.New("authkey: invalid PEM")
+
+	// PEM block does not contain private key in PKCS #8, ASN.1 DER form.
+	ErrAuthKeyBadPKCS8 = errors.New("authkey: invalid PKCS#8")
+
+	// Authentication token signing key is not ECDSA private key with P-256 curve.
 	ErrAuthKeyNotECDSAP256 = errors.New("authkey: not ECDSA P-256")
 )
 

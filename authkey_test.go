@@ -67,7 +67,7 @@ func TestAuthKeyNotECDSA256(t *testing.T) {
 }
 
 func TestAuthKey(t *testing.T) {
-	key, err := AuthKeyFromFile("testdata/AuthKeyValid.p8")
+	key, err := AuthKeyFromFile("testdata/AuthKey_5MDQ4KLTY7.p8")
 	if err != nil {
 		t.Error(err)
 	}
@@ -76,15 +76,20 @@ func TestAuthKey(t *testing.T) {
 	}
 }
 
-func BenchmarkAuthKey(b *testing.B) {
-	file, err := os.ReadFile("testdata/AuthKeyValid.p8")
+func BenchmarkAuthKeyFromBytes(b *testing.B) {
+	file, err := os.ReadFile("testdata/AuthKey_5MDQ4KLTY7.p8")
 	if err != nil {
 		b.Fatal(err)
 	}
 
 	b.ResetTimer()
-
 	for i := 0; i < b.N; i++ {
 		AuthKeyFromBytes(file)
+	}
+}
+
+func BenchmarkAuthKeyFromFile(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		AuthKeyFromFile("testdata/AuthKey_5MDQ4KLTY7.p8")
 	}
 }

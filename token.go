@@ -8,6 +8,8 @@ import (
 	"time"
 )
 
+// See https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server/establishing_a_token-based_connection_to_apns.
+
 type Token struct {
 	sync.Mutex
 	Key             *ecdsa.PrivateKey
@@ -64,4 +66,8 @@ func (t *Token) SetAuthorization(h http.Header) error {
 	}
 	h.Set("authorization", "bearer "+bearer)
 	return nil
+}
+
+func SetBearer(h http.Header, b string) {
+	h.Set("authorization", "bearer "+b)
 }
