@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"io"
 	"net/http"
 	"strconv"
 )
@@ -214,15 +215,20 @@ func (n *Notification) BuildRequest() (*http.Request, error) {
 
 // BuildRequestWithContext builds request with context.
 func (n *Notification) BuildRequestWithContext(ctx context.Context) (*http.Request, error) {
-	payload := new(bytes.Buffer)
-	err := json.NewEncoder(payload).Encode(n)
+	var body io.Reader
+	if n.Payload != nil {
+		b, err := json.Marshal(n)
+		if err != nil {
+			return nil, err
+		}
+		body = bytes.NewBuffer(b)
+	}
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, n.URL(), body)
 	if err != nil {
 		return nil, err
 	}
-	req, err := http.NewRequestWithContext(ctx, "POST", n.URL(), payload)
-	if err != nil {
-		return nil, err
-	}
+
 	n.SetHeaders(req.Header)
 	return req, nil
 }
