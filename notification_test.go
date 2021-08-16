@@ -2,6 +2,7 @@ package apns
 
 import (
 	"encoding/json"
+	"io"
 	"net/http"
 	"testing"
 )
@@ -130,7 +131,56 @@ func TestNotificationSetHeaders(t *testing.T) {
 }
 
 func TestNotificationBuildRequest(t *testing.T) {
+	n := &Notification{
+		DeviceToken: "7c968c83f6fd6de5843c309150ed1a706bc64fcdc42310f66054c0271e67219e",
+		ID:          "EC1BF194-B3B2-424A-89A9-5A918A6E6B5D",
+		Topic:       "com.example.app",
+		Payload:     `{"aps":{"alert":{"title":"Hello"}}}`,
+	}
+	req, err := n.BuildRequest()
+	if err != nil {
+		t.Fatal(err)
+	}
 
+	if req.Method != http.MethodPost {
+		t.Errorf("req.Method: %v; want: %v", req.Method, http.MethodPost)
+	}
+	if req.URL.String() != "https://api.push.apple.com/3/device/7c968c83f6fd6de5843c309150ed1a706bc64fcdc42310f66054c0271e67219e" {
+		t.Errorf("req.URL: %v; want: %v", req.URL, "https://api.push.apple.com/3/device/7c968c83f6fd6de5843c309150ed1a706bc64fcdc42310f66054c0271e67219e")
+	}
+	if req.Header.Get("apns-id") != "EC1BF194-B3B2-424A-89A9-5A918A6E6B5D" {
+		t.Errorf("req.Header[apns-id]: %v; want: %v", req.Header.Get("apns-id"), "EC1BF194-B3B2-424A-89A9-5A918A6E6B5D")
+	}
+	if req.Header.Get("apns-topic") != "com.example.app" {
+		t.Errorf("req.Header[apns-topic]: %v; want: %v", req.Header.Get("apns-topic"), "com.example.app")
+	}
+
+	body, err := io.ReadAll(req.Body)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if string(body) != `{"aps":{"alert":{"title":"Hello"}}}` {
+		t.Errorf("req.Body: %v; want: %v", string(body), `{"aps":{"alert":{"title":"Hello"}}}`)
+	}
+}
+
+func TestNotificationBuildRequestErrors(t *testing.T) {
+	n := &Notification{
+		Host: ":::::",
+	}
+	_, err := n.BuildRequest()
+	if err == nil {
+		t.Error("err must be not nil")
+	}
+
+	n = &Notification{
+		Payload: "{{{",
+	}
+	_, err = n.BuildRequest()
+	if err == nil {
+		t.Error("err must be not nil")
+	}
 }
 
 func BenchmarkNotificationSimplePayload(b *testing.B) {

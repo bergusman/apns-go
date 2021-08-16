@@ -58,7 +58,7 @@ func TestParseResponseNot200(t *testing.T) {
 	}
 }
 
-func TestParseResponseFailure(t *testing.T) {
+func TestParseResponseErrors(t *testing.T) {
 	r := &http.Response{
 		StatusCode: 410,
 		Header: http.Header{
