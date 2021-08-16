@@ -51,14 +51,14 @@ func TestAuthKeyNotECDSA256(t *testing.T) {
 	names := []string{
 		"testdata/AuthKeyRSA.p8",
 		"testdata/AuthKeyED25519.p8",
-		"testdata/AuthKeyECDSA224.p8",
+		"testdata/AuthKeyECDSAP224.p8",
 	}
 
 	for _, name := range names {
 		_, err := AuthKeyFromFile(name)
 		if err != nil {
 			if err != ErrAuthKeyNotECDSAP256 {
-				t.Errorf("%v: want ErrAuthKeyNotECDSA256 got: %q", name, err.Error())
+				t.Errorf("%v: want ErrAuthKeyNotECDSAP256 got: %q", name, err.Error())
 			}
 		} else {
 			t.Errorf("%v: want not nil err", name)
