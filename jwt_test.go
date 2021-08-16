@@ -18,7 +18,7 @@ func TestI2OSP(t *testing.T) {
 	n := big.NewInt(1337)
 	h := hex.EncodeToString(i2osp(n))
 	if h != "0000000000000000000000000000000000000000000000000000000000000539" {
-		t.Errorf("got: %q", h)
+		t.Errorf("got: %v", h)
 	}
 }
 
@@ -32,7 +32,7 @@ func TestES256KeyNotP256(t *testing.T) {
 		_, err = es256(key, []byte("input"))
 		if err != nil {
 			if err != ErrJWTKeyNotECDSAP256 {
-				t.Errorf("curve %v: want: ErrJWTKeyNot256Bits got: %q", curve.Params().Name, err.Error())
+				t.Errorf("curve %v: got: %q; want: ErrJWTKeyNot256Bits", curve.Params().Name, err)
 			}
 		} else {
 			t.Errorf("curve %v: want not nil err", curve.Params().Name)
@@ -94,7 +94,7 @@ func TestGenerateBearer(t *testing.T) {
 		t.Fatal(err)
 	}
 	if len(sig) != 64 {
-		t.Fatalf("len(sig): %v want: 64", len(sig))
+		t.Fatalf("len(sig): %v; want: 64", len(sig))
 	}
 
 	r, s := new(big.Int), new(big.Int)
@@ -128,10 +128,10 @@ func TestGenerateBearer(t *testing.T) {
 	}
 
 	if header.Alg != "ES256" {
-		t.Errorf("header.alg: %v want: %v", header.Alg, teamID)
+		t.Errorf("header.alg: %v; want: %v", header.Alg, teamID)
 	}
 	if header.Kid != keyID {
-		t.Errorf("header.kid: %v want: %v", header.Kid, issuedAt)
+		t.Errorf("header.kid: %v; want: %v", header.Kid, issuedAt)
 	}
 
 	// Payload
@@ -150,10 +150,10 @@ func TestGenerateBearer(t *testing.T) {
 	}
 
 	if payload.Iss != teamID {
-		t.Errorf("payload.iss: %v want: %v", payload.Iss, teamID)
+		t.Errorf("payload.iss: %v; want: %v", payload.Iss, teamID)
 	}
 	if payload.Iat != issuedAt {
-		t.Errorf("payload.iat: %v want: %v", payload.Iat, issuedAt)
+		t.Errorf("payload.iat: %v; want: %v", payload.Iat, issuedAt)
 	}
 }
 

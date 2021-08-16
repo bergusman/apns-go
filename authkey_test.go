@@ -8,7 +8,7 @@ import (
 func TestAuthKeyNoSuchFile(t *testing.T) {
 	_, err := AuthKeyFromFile("")
 	if err.Error() != "open : no such file or directory" {
-		t.Errorf(`want: "no such file" got: %q`, err.Error())
+		t.Errorf("got: %q; want: %q", err, "open : no such file or directory")
 	}
 }
 
@@ -21,7 +21,7 @@ func TestAuthKeyBadPEM(t *testing.T) {
 		_, err := AuthKeyFromFile(name)
 		if err != nil {
 			if err != ErrAuthKeyBadPEM {
-				t.Errorf("%v: want ErrAuthKeyBadPEM got: %q", name, err.Error())
+				t.Errorf("%v: got: %q; want: ErrAuthKeyBadPEM", name, err)
 			}
 		} else {
 			t.Errorf("%v: want not nil err", name)
@@ -39,7 +39,7 @@ func TestAuthKeyBadPKCS8(t *testing.T) {
 		_, err := AuthKeyFromFile(name)
 		if err != nil {
 			if err != ErrAuthKeyBadPKCS8 {
-				t.Errorf("%v: want ErrAuthKeyBadPKCS8 got: %q", name, err.Error())
+				t.Errorf("%v: got: %q; want ErrAuthKeyBadPKCS8", name, err)
 			}
 		} else {
 			t.Errorf("%v: want not nil err", name)
@@ -58,7 +58,7 @@ func TestAuthKeyNotECDSA256(t *testing.T) {
 		_, err := AuthKeyFromFile(name)
 		if err != nil {
 			if err != ErrAuthKeyNotECDSAP256 {
-				t.Errorf("%v: want ErrAuthKeyNotECDSAP256 got: %q", name, err.Error())
+				t.Errorf("%v: got: %q; want ErrAuthKeyNotECDSAP256", name, err)
 			}
 		} else {
 			t.Errorf("%v: want not nil err", name)
