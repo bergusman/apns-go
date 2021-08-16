@@ -40,7 +40,7 @@ func Example() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	if res.Status == apns.StatusSent {
+	if res.Status == apns.Status200 {
 		fmt.Println("Successfully sent!")
 	} else {
 		fmt.Println("Sent failed by reason:", res.Reason)
