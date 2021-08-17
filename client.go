@@ -11,11 +11,14 @@ var (
 	ErrClientTokenNil        = errors.New("client: token is nil")
 )
 
+// Token-based client for sending remote notifications.
 type Client struct {
 	Token      *Token
 	HTTPClient *http.Client
 }
 
+// NewClient creates client with token and http.Client client,
+// pass nil for client to use http.DefaultClient.
 func NewClient(token *Token, httpClient *http.Client) *Client {
 	return &Client{
 		Token:      token,
@@ -23,10 +26,12 @@ func NewClient(token *Token, httpClient *http.Client) *Client {
 	}
 }
 
+// Push sends remote notification.
 func (c *Client) Push(n *Notification) (*Response, error) {
 	return c.PushWithContext(context.Background(), n)
 }
 
+// Push sends remote notification with context.
 func (c *Client) PushWithContext(ctx context.Context, n *Notification) (*Response, error) {
 	if n == nil {
 		return nil, ErrClientNotificationNil

@@ -1,3 +1,4 @@
+// APNS package for sending remote notifications for iOS by token-based connection.
 package apns
 
 import (

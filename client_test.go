@@ -1,6 +1,9 @@
 package apns
 
 import (
+	"crypto/ecdsa"
+	"crypto/elliptic"
+	"crypto/rand"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -99,6 +102,28 @@ func TestClientPushErrors(t *testing.T) {
 			t.Errorf("got: %v, want: ErrClientTokenNil", err)
 		}
 	} else {
+		t.Error("err must be not nil")
+	}
+
+	key, err := ecdsa.GenerateKey(elliptic.P384(), rand.Reader)
+	if err != nil {
+		t.Fatal(err)
+	}
+	client.Token = &Token{
+		Key: key,
+	}
+	_, err = client.Push(n)
+	if err != nil {
+		if err != ErrJWTKeyNotECDSAP256 {
+			t.Errorf("got: %v, want: ErrJWTKeyNotECDSAP256", err)
+		}
+	} else {
+		t.Error("err must be not nil")
+	}
+
+	n.Host = ":::::"
+	_, err = client.Push(n)
+	if err == nil {
 		t.Error("err must be not nil")
 	}
 }
