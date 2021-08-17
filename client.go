@@ -6,6 +6,11 @@ import (
 	"net/http"
 )
 
+var (
+	ErrClientNotificationNil = errors.New("client: notification is nil")
+	ErrClientTokenNil        = errors.New("client: token is nil")
+)
+
 type Client struct {
 	Token      *Token
 	HTTPClient *http.Client
@@ -24,12 +29,16 @@ func (c *Client) Push(n *Notification) (*Response, error) {
 
 func (c *Client) PushWithContext(ctx context.Context, n *Notification) (*Response, error) {
 	if n == nil {
-		return nil, errors.New("notification is nil")
+		return nil, ErrClientNotificationNil
 	}
 
 	req, err := n.BuildRequestWithContext(ctx)
 	if err != nil {
 		return nil, err
+	}
+
+	if c.Token == nil {
+		return nil, ErrClientTokenNil
 	}
 
 	err = c.Token.SetAuthorization(req.Header)
