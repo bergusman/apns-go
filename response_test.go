@@ -20,8 +20,8 @@ func TestParseResponse200(t *testing.T) {
 		t.Errorf("err not nil: %q", err)
 	}
 	if res != nil {
-		if res.Id != "EC1BF194-B3B2-424A-89A9-5A918A6E6B5D" {
-			t.Errorf("res.Id: %v want: EC1BF194-B3B2-424A-89A9-5A918A6E6B5D", res.Id)
+		if res.ID != "EC1BF194-B3B2-424A-89A9-5A918A6E6B5D" {
+			t.Errorf("res.ID: %v want: EC1BF194-B3B2-424A-89A9-5A918A6E6B5D", res.ID)
 		}
 		if res.Status != Status200 {
 			t.Errorf("res.Status: %v want: 200", res.Status)
@@ -44,8 +44,8 @@ func TestParseResponseNot200(t *testing.T) {
 		t.Errorf("err not nil: %q", err)
 	}
 	if res != nil {
-		if res.Id != "EC1BF194-B3B2-424A-89A9-5A918A6E6B5D" {
-			t.Errorf("res.Id: %v want: EC1BF194-B3B2-424A-89A9-5A918A6E6B5D", res.Id)
+		if res.ID != "EC1BF194-B3B2-424A-89A9-5A918A6E6B5D" {
+			t.Errorf("res.ID: %v want: EC1BF194-B3B2-424A-89A9-5A918A6E6B5D", res.ID)
 		}
 		if res.Status != 410 {
 			t.Errorf("res.Status: %v want: 410", res.Status)

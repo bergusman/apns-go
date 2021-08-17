@@ -157,7 +157,7 @@ type Response struct {
 	// Use this value to identify the notification.
 	// If you don’t specify an apns-id field in your request,
 	// APNs creates a new UUID and returns it in this header.
-	Id string // header: apns-id
+	ID string // header: apns-id
 
 	// The HTTP status code.
 	Status int // header: :status
@@ -176,7 +176,7 @@ type Response struct {
 func ParseResponse(r *http.Response) (*Response, error) {
 	defer r.Body.Close()
 	res := &Response{
-		Id:     r.Header.Get("apns-id"),
+		ID:     r.Header.Get("apns-id"),
 		Status: r.StatusCode,
 	}
 	if err := json.NewDecoder(r.Body).Decode(res); err != nil && err != io.EOF {
