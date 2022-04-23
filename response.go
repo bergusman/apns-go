@@ -163,12 +163,12 @@ type Response struct {
 	Status int // header: :status
 
 	// The error code (specified as a string) indicating the reason for the failure.
-	Reason string `reason:"alert,omitempty"`
+	Reason string `json:"reason,omitempty"`
 
 	// The time, represented in milliseconds since Epoch,
 	// at which APNs confirmed the token was no longer valid for the topic.
 	// This key is included only when the error in the :status field is 410.
-	Timestamp int64 `timestamp:"alert,omitempty"`
+	Timestamp int64 `json:"timestamp,omitempty"`
 }
 
 // ParseResponse parses HTTP response r from APNs request.
